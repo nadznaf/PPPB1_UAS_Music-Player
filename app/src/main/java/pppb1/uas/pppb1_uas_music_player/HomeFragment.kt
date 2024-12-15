@@ -1,59 +1,81 @@
 package pppb1.uas.pppb1_uas_music_player
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import pppb1.uas.pppb1_uas_music_player.databinding.FragmentHomeBinding
+import pppb1.uas.pppb1_uas_music_player.network.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var itemUserAdapter: ItemUserAdapter
+    private lateinit var recyclerView: RecyclerView
+    private var musicList: List<Data> = listOf()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        // Inflate layout menggunakan View Binding
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        val prefManager = PrefManager.getInstance(requireContext())
+        val username = prefManager.getUsername()
+
+        // Setel teks di txtName dengan username
+        binding.txtHello.text = "Hello, $username!"
+
+        // Setup RecyclerView
+        recyclerView = binding.rvMusics // Asumsikan ada RecyclerView di fragment_home.xml
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Fetch data dari API
+        fetchUserData()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun fetchUserData() {
+        ApiClient.getInstance().getAllMusics().enqueue(object : Callback<List<Data>> {
+            override fun onResponse(call: Call<List<Data>>, response: Response<List<Data>>) {
+                if (response.isSuccessful) {
+                    musicList = response.body() ?: listOf()
+                    itemUserAdapter = ItemUserAdapter(requireContext(), musicList)
+                    recyclerView.adapter = this@HomeFragment.itemUserAdapter
+
+                    // Handle item click
+                    itemUserAdapter.setOnItemClickListener { selectedMusic ->
+                        val intent = Intent(requireContext(), DetailActivity::class.java).apply {
+                            putExtra("song_name", musicItem?.judul)
+                            putExtra("artist", musicItem?.artis)
+                            putExtra("album_name", musicItem?.album)
+                            putExtra("release", musicItem?.rilis)
+                            putExtra("picture", musicItem?.gambar)
+                        }
+                        startActivity(intent)
+                    }
                 }
             }
+
+            override fun onFailure(call: Call<List<Data>>, t: Throwable) {
+                Log.e("API Error", "Failed to fetch data", t)
+            }
+        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Hindari memory leaks
     }
 }

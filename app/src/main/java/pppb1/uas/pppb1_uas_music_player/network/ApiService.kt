@@ -14,18 +14,19 @@ interface ApiService {
     @GET("user")
     fun getAllUsers(): Call<List<User>>
 
-    @GET("user/{id}")
-    fun getUserById(@Path("id") musicId: String): Call<List<User>>
+    @POST("user")
+    fun createUser(@Body user: User): Call<User>
 
     @GET("musics")
     fun getAllMusics(): Call<List<Musics>>
 
     @POST("musics")
-    fun postNewMusics(@Body rawJson: RequestBody) : Call<Musics>
+    fun createMusic(@Body musics: Musics) : Call<Musics>
 
     @POST("musics/{id}")
-    fun updateMusics(@Path("id") musicId: String, @Body rawJson: RequestBody) : Call<Musics>
+    fun updateMusic(@Path("id") musicId: String, @Body musics: Musics) : Call<Musics>
 
     @DELETE("musics/{id}")
-    fun deleteMusics(@Path("id") musicId: String): Call<List<Musics>>
+    fun deleteMusic(@Path("id") musicId: String): Call<Musics>
+
 }

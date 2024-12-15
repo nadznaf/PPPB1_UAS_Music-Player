@@ -2,16 +2,11 @@ package pppb1.uas.pppb1_uas_music_player
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import pppb1.uas.pppb1_uas_music_player.admin.AdminHomePage
+import pppb1.uas.pppb1_uas_music_player.admin.AdminActivity
+//import pppb1.uas.pppb1_uas_music_player.admin.AdminHomePage
 import pppb1.uas.pppb1_uas_music_player.databinding.ActivityLoginBinding
-import pppb1.uas.pppb1_uas_music_player.model.User
-import pppb1.uas.pppb1_uas_music_player.network.ApiClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -19,13 +14,9 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefManager = PrefManager.getInstance(this)
-
-        checkLoginStatus()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val client = ApiClient.getInstance()
+        prefManager = PrefManager.getInstance(this)
 
         with(binding) {
             btnLogin.setOnClickListener {
@@ -38,45 +29,70 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-
+                    if (isValidUsernamePassword()) {
+                        prefManager.setLoggedIn(true)
+                        checkLoginStatus()
+                    } else {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Input username atau password salah",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-                val response = client.getAllUsers()
-                response.enqueue(object: Callback<List<User>> {
-                    override fun onResponse(
-                        call: Call<List<User>>,
-                        response: Response<List<User>>
-                    ) {
-                        if (response.isSuccessful && response.body() != null) {
-                            response.body()?.forEach { i ->
-                                if (i.username == inputUsnLogin.text.toString() && i.password == inputPwLogin.text.toString()) {
-                                    prefManager.setLoggedIn(true)
-                                    prefManager.saveUsername(inputUsnLogin.text.toString())
-                                    prefManager.savePassword(inputPwLogin.text.toString())
-                                    prefManager.saveRole(i.role)
-                                }
-                            }
-                        } else {
-                            Log.e("API Error", "Response not successful or body is null")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                        Toast.makeText(this@LoginActivity, "Koneksi error ${t.toString()}", Toast.LENGTH_LONG).show()
-                    }
-                })
+            }
+            btnToRegis.setOnClickListener {
+                startActivity(
+                    Intent(
+                        this@LoginActivity,
+                        RegisterActivity::class.java
+                    )
+                )
             }
         }
     }
 
-    fun checkLoginStatus() {
-        if (prefManager.isLoggedIn()) {
-            val intentToHomePage = if (prefManager.getRole() == "admin") {
-                Intent(this@LoginActivity, AdminHomePage::class.java)
+    private fun isValidUsernamePassword(): Boolean {
+        val username = prefManager.getUsername()
+        val password = prefManager.getPassword()
+        val inputUsnLogin = binding.inputUsnLogin.text.toString()
+        val inputPwLogin = binding.inputPwLogin.text.toString()
+        return username == inputUsnLogin && password == inputPwLogin
+    }
+
+
+    private fun checkLoginStatus() {
+        val isLoggedIn = prefManager.isLoggedIn()
+        val username = binding.inputUsnLogin.text.toString()
+
+        if (isLoggedIn) {
+            Toast.makeText(this@LoginActivity, "Anda berhasil login!", Toast.LENGTH_SHORT).show()
+
+            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("emailUser", username)
+            editor.apply()
+
+            if (username == "admin") {
+                prefManager.saveRole("admin")
+                startActivity(
+                    Intent(
+                        this@LoginActivity, AdminActivity::class.java
+                    )
+                )
             } else {
-                Intent(this@LoginActivity, UserHomeActivity::class.java)
+                prefManager.saveRole("user")
+                startActivity(
+                    Intent(
+                        this@LoginActivity, MainActivity::class.java
+                    )
+                )
             }
-            intentToHomePage.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intentToHomePage)
+            finish()
+        } else {
+            Toast.makeText(
+                this@LoginActivity, "Login gagal dilakukan", Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

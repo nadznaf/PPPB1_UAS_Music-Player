@@ -2,6 +2,7 @@ package pppb1.uas.pppb1_uas_music_player
 
 import android.content.Context
 import android.content.SharedPreferences
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 import kotlin.concurrent.Volatile
 
@@ -17,6 +18,7 @@ class PrefManager private constructor(context: Context){
 
         @Volatile
         private var instance: PrefManager? = null
+        @OptIn(InternalCoroutinesApi::class)
         fun getInstance(context: Context): PrefManager {
             return instance ?: synchronized(this) {
                 instance ?: PrefManager(context.applicationContext).also {
@@ -48,16 +50,16 @@ class PrefManager private constructor(context: Context){
         editor.putString(KEY_PASSWORD, password)
         editor.apply()
     }
-    fun saveRole(role: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString(KEY_ROLE, role)
-        editor.apply()
-    }
     fun getUsername(): String {
         return sharedPreferences.getString(KEY_USERNAME, "") ?:""
     }
     fun getPassword(): String {
         return sharedPreferences.getString(KEY_PASSWORD, "") ?:""
+    }
+    fun saveRole(role: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_ROLE, role)
+        editor.apply()
     }
     fun getRole(): String {
         return sharedPreferences.getString(KEY_ROLE, "") ?:""

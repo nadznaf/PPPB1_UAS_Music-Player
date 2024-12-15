@@ -25,4 +25,9 @@
         android:name="pppb1.uas.pppb1_uas_music_player.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="pppb1.uas.pppb1_uas_music_player.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
 </navigation>

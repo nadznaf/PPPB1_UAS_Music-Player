@@ -23,6 +23,8 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/music"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
             <TextView
                 android:id="@+id/judul_lagu"
@@ -36,11 +38,24 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_regular"/>
             <ImageView
-                android:id="@+id/img_like"
+                android:id="@+id/btn_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/like_line"
+                android:src="@drawable/baseline_edit"
+                app:layout_constraintEnd_toStartOf="@id/btn_delete"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="8dp"
+                />
+            <ImageView
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/baseline_delete"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="8dp"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
