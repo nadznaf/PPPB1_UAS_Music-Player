@@ -38,8 +38,8 @@ class AdminCreateActivity : AppCompatActivity() {
                     album = albumName,
                     rilis = release
                 )
-                val ApiService = ApiClient.getInstance()
-                val response = ApiService.createMusic(music)
+                val apiService = ApiClient.getInstance()
+                val response = apiService.createMusic(music)
                 response.enqueue(object : Callback<Musics>{
                     override fun onResponse(call: Call<Musics>, response: Response<Musics>) {
                         if (response.isSuccessful) {

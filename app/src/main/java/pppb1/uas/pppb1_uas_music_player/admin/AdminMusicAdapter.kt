@@ -20,8 +20,7 @@ import kotlinx.coroutines.launch
 import pppb1.uas.pppb1_uas_music_player.DetailActivity
 import pppb1.uas.pppb1_uas_music_player.R
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemDialogBinding
-import pppb1.uas.pppb1_uas_music_player.databinding.MusicItemBinding
-import pppb1.uas.pppb1_uas_music_player.databinding.MusicItemDashboardBinding
+import pppb1.uas.pppb1_uas_music_player.databinding.ItemMusicAdminBinding
 import pppb1.uas.pppb1_uas_music_player.model.Musics
 import pppb1.uas.pppb1_uas_music_player.network.ApiService
 import retrofit2.Call
@@ -36,7 +35,7 @@ class AdminMusicAdapter(
     private val onClickMusics: OnClickMusics
 ): RecyclerView.Adapter<AdminMusicAdapter.ItemMusicViewHolder>(){
     inner class ItemMusicViewHolder
-        (private val binding: MusicItemDashboardBinding) : RecyclerView.ViewHolder(binding.root) {
+        (private val binding: ItemMusicAdminBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: Musics) {
                 with(binding) {
                     judulLagu.text = data.judul
@@ -103,7 +102,7 @@ class AdminMusicAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemMusicViewHolder {
         val binding =
-            MusicItemDashboardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemMusicAdminBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemMusicViewHolder(binding)
     }
 

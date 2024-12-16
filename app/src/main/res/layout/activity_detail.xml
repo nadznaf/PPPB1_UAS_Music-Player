@@ -1,10 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    android:padding="32dp"
+    tools:context=".DetailActivity"
+    android:orientation="vertical"
+    android:background="@color/gelap">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:onClick="back"
+        android:padding="10dp"
+        android:src="@drawable/baseline_back"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/detail_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="Detail Music"
+        />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/song_img"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/music"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:importantForAccessibility="no"
+        android:tint="@color/gelap"
+        android:background="@color/abu_tua"
+        />
+    <ImageView
+        android:id="@+id/btn_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/like_line"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        app:tint="@color/pink" />
+    <TextView
+        android:id="@+id/artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppins_regular"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="BSS"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="Fighting Haeyaji"
+        />
+
+    <TextView
+        android:id="@+id/album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_regular"
+        android:textStyle="bold"
+        android:textColor="@color/abu_tua"
+        android:text="Album Fighting"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:id="@+id/rilis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_regular"
+        android:textStyle="bold"
+        android:textColor="@color/abu_tua"
+        android:text="2024 22 11"
+        android:textAlignment="center"
+        />
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/white"
+        android:layout_marginTop="32dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageButton
+            android:id="@+id/ic_previous"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/previous"
+            android:importantForAccessibility="no"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
+        <ImageButton
+            android:id="@+id/ic_start"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/start"
+            android:importantForAccessibility="no"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
+        <ImageButton
+            android:id="@+id/ic_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play"
+            android:importantForAccessibility="no"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
+        <ImageButton
+            android:id="@+id/ic_next"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/next"
+            android:importantForAccessibility="no"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
+        <ImageButton
+            android:id="@+id/ic_end"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/end"
+            android:importantForAccessibility="no"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
+    </LinearLayout>
+</LinearLayout>

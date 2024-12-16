@@ -1,4 +1,4 @@
-package pppb1.uas.pppb1_uas_music_player
+package pppb1.uas.pppb1_uas_music_player.auth
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,14 +13,14 @@ class PrefManager private constructor(context: Context){
         private const val PREFS_FILENAME = "AuthAppPrefs"
         private const val KEY_IS_LOGGED_IN = "isLoggedIn"
         private const val KEY_USERNAME = "username"
-        private const val KEY_ROLE = "user"
+        private const val KEY_EMAIL = "email"
         private const val KEY_PASSWORD = "password"
+        private const val KEY_ROLE = "role"
 
-        @Volatile
+        @kotlin.jvm.Volatile
         private var instance: PrefManager? = null
-        @OptIn(InternalCoroutinesApi::class)
         fun getInstance(context: Context): PrefManager {
-            return instance ?: synchronized(this) {
+            return instance ?: kotlin.synchronized(this) {
                 instance ?: PrefManager(context.applicationContext).also {
                     instance = it
                 }
@@ -28,7 +28,8 @@ class PrefManager private constructor(context: Context){
         }
     }
     init {
-        sharedPreferences = context.getSharedPreferences(PREFS_FILENAME,
+        sharedPreferences = context.getSharedPreferences(
+            PREFS_FILENAME,
             Context.MODE_PRIVATE)
     }
 
@@ -50,19 +51,27 @@ class PrefManager private constructor(context: Context){
         editor.putString(KEY_PASSWORD, password)
         editor.apply()
     }
-    fun getUsername(): String {
-        return sharedPreferences.getString(KEY_USERNAME, "") ?:""
-    }
-    fun getPassword(): String {
-        return sharedPreferences.getString(KEY_PASSWORD, "") ?:""
+    fun saveEmail(email: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_EMAIL, email)
+        editor.apply()
     }
     fun saveRole(role: String) {
         val editor = sharedPreferences.edit()
         editor.putString(KEY_ROLE, role)
         editor.apply()
     }
+    fun getUsername(): String {
+        return sharedPreferences.getString(KEY_USERNAME, "") ?:""
+    }
+    fun getEmail(): String {
+        return sharedPreferences.getString(KEY_EMAIL, "") ?: ""
+    }
+    fun getPassword(): String {
+        return sharedPreferences.getString(KEY_PASSWORD, "") ?:""
+    }
     fun getRole(): String {
-        return sharedPreferences.getString(KEY_ROLE, "") ?:""
+        return sharedPreferences.getString(KEY_ROLE, "user") ?: "user"
     }
     fun clear(){
         val editor = sharedPreferences.edit()
