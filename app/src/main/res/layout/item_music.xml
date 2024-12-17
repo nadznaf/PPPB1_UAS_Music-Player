@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="16dp">
+    android:paddingVertical="8dp">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 android:layout_marginHorizontal="8dp"
                 >
                 <TextView
-                    android:id="@+id/judul_lagu"
+                    android:id="@+id/txt_judul_lagu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -48,7 +48,7 @@
                     android:textSize="16sp"
                     android:fontFamily="@font/poppins_bold"/>
                 <TextView
-                    android:id="@+id/artis"
+                    android:id="@+id/txt_artis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -59,16 +59,6 @@
                     android:textSize="14sp"
                     android:fontFamily="@font/poppins_regular"/>
             </LinearLayout>
-            <ImageView
-                android:id="@+id/img_like"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/like_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/pink" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

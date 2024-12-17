@@ -29,7 +29,7 @@
         android:fontFamily="@font/poppins_bold"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:text="Detail Music"
+        android:text="Detail Music Favorite"
         />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -46,10 +46,10 @@
         android:background="@color/abu_tua"
         />
     <ImageView
-        android:id="@+id/btn_favorite"
+        android:id="@+id/btn_unfavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/like_line"
+        android:src="@drawable/like_full"
         android:padding="8dp"
         android:layout_marginTop="16dp"
         app:tint="@color/pink" />

@@ -6,16 +6,14 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.OnConflictStrategy
-import pppb1.uas.pppb1_uas_music_player.model.Library
+import pppb1.uas.pppb1_uas_music_player.model.Favorite
 
 @Dao
-interface LibraryDao {
+interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(library: Library)
-
-    @Query("SELECT * FROM library_table")
-    fun getAllLibrary(): LiveData<List<Library>>
-
+    fun insert(favorite : Favorite)
     @Delete
-    fun delete(library: Library)
+    fun delete(favorite: Favorite)
+    @Query("SELECT * from favorite_db")
+    fun getAllFavorite (): LiveData<List<Favorite>>
 }

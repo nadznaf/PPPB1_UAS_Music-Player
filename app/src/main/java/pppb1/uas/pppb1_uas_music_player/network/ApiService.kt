@@ -21,12 +21,11 @@ interface ApiService {
     fun getAllMusics(): Call<List<Musics>>
 
     @POST("musics")
-    fun createMusic(@Body musics: Musics) : Call<Musics>
+    fun createMusics(@Body musics: Musics): Call<Musics>
 
     @POST("musics/{id}")
-    fun updateMusic(@Path("id") musicId: String, @Body musics: Musics) : Call<Musics>
+    fun updateMusics(@Path("id") musicId: String, @Body musics: Musics): Call<Musics>
 
     @DELETE("musics/{id}")
-    fun deleteMusic(@Path("id") musicId: String): Call<Musics>
-
+    fun deleteMusics(@Path("id") musicId: String): Call<Musics>
 }

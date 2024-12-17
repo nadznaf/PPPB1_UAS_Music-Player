@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".admin.AdminActivity"
+    android:background="@color/gelap"
     >
     <TextView
         android:id="@+id/txt_dashboard"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Admin Dashboard"
         android:textSize="24sp"
-        android:textColor="@color/gelap"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:fontFamily="@font/poppins_bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +22,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="32dp"
         />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/txt_dashboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_admin"
         android:layout_width="match_parent"
@@ -36,10 +46,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tambah data"
-        android:textColor="@color/white"
+        android:textColor="@color/gelap"
         android:textSize="16sp"
         android:fontFamily="@font/poppins_bold"
-        android:backgroundTint="@color/gelap"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@id/btn_logout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

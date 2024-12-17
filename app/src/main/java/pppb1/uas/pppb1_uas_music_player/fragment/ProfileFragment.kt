@@ -11,11 +11,6 @@ import pppb1.uas.pppb1_uas_music_player.auth.PrefManager
 import pppb1.uas.pppb1_uas_music_player.databinding.FragmentProfileBinding
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemDialogBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var prefManager: PrefManager
@@ -39,8 +34,8 @@ class ProfileFragment : Fragment() {
         }
         return (binding.root)
     }
-
     private fun showLogoutDialog() {
+        // Inflate the custom dialog layout using ViewBinding
         val builder = AlertDialog.Builder(requireActivity())
         val prefManager = PrefManager.getInstance(requireContext())
         val inflate = requireActivity().layoutInflater
@@ -62,9 +57,6 @@ class ProfileFragment : Fragment() {
                 dialog.dismiss()
             }
         }
-
         dialog.show()
-
     }
-
 }

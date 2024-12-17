@@ -3,17 +3,12 @@ package pppb1.uas.pppb1_uas_music_player.admin
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import pppb1.uas.pppb1_uas_music_player.auth.PrefManager
-import pppb1.uas.pppb1_uas_music_player.R
 import pppb1.uas.pppb1_uas_music_player.databinding.ActivityAdminBinding
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemDialogBinding
-import pppb1.uas.pppb1_uas_music_player.model.Library
 import pppb1.uas.pppb1_uas_music_player.model.Musics
 import pppb1.uas.pppb1_uas_music_player.network.ApiClient
 import retrofit2.Call
@@ -22,19 +17,20 @@ import retrofit2.Response
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminBinding
-    private lateinit var adapter: AdminMusicAdapter
-    private val musicList = ArrayList<Musics>()
+    private lateinit var adapter: ItemMusicAdminAdapter
+    private val musicsList = ArrayList<Musics>()
     private lateinit var prefmanager: PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        prefmanager = PrefManager.getInstance(this@AdminActivity)
+        prefmanager = PrefManager.getInstance(this)
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupRecyclerView()
-        fetchMusicList()
-
+        fetchLatihanList()
+        binding.progressBar.visibility = android.view.View.VISIBLE
+        // Tombol untuk Create Activity
         binding.btnTambah.setOnClickListener {
             startActivity(
                 Intent(
@@ -48,23 +44,23 @@ class AdminActivity : AppCompatActivity() {
 
         }
     }
+
     private fun setupRecyclerView() {
-        adapter = AdminMusicAdapter(musicList, ApiClient.getInstance()) {
-            data ->
-            val intent = Intent(this@AdminActivity, AdminDetailActivity::class.java).apply {
+        adapter = ItemMusicAdminAdapter(musicsList, ApiClient.getInstance()) { data ->
+            val intent = Intent(this, AdminDetailActivity::class.java).apply {
                 putExtra("id", data.id)
-                putExtra("songName", data.judul)
-                putExtra("artis", data.artis)
-                putExtra("album", data.album)
-                putExtra("rilis", data.rilis)
+                putExtra("song_name", data.song_name)
+                putExtra("artist", data.artist)
+                putExtra("album_name", data.album_name)
+                putExtra("release", data.release)
             }
             startActivity(intent)
         }
-        binding.rvAdmin.layoutManager = LinearLayoutManager(this@AdminActivity)
+        binding.rvAdmin.layoutManager = LinearLayoutManager(this)
         binding.rvAdmin.adapter = adapter
     }
 
-    private fun fetchMusicList() {
+    private fun fetchLatihanList() {
         val client = ApiClient.getInstance()
         val response = client.getAllMusics()
 
@@ -72,13 +68,14 @@ class AdminActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<Musics>>, response: Response<List<Musics>>) {
                 if (response.isSuccessful && response.body() != null) {
                     // Tambahkan data ke dalam list dan perbarui adapter
-                    musicList.clear()
-                    musicList.addAll(response.body()!!)
+                    binding.progressBar.visibility = android.view.View.GONE
+                    musicsList.clear()
+                    musicsList.addAll(response.body()!!)
                     adapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(
                         this@AdminActivity,
-                        "Gagal memuat data lagu",
+                        "Gagal memuat data latihan",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -94,8 +91,8 @@ class AdminActivity : AppCompatActivity() {
         })
     }
 
-
     private fun showLogoutDialog() {
+        // Inflate the custom dialog layout using ViewBinding
         val builder = AlertDialog.Builder(this)
         val inflate = this.layoutInflater
         val binding = ItemDialogBinding.inflate(inflate)
@@ -116,6 +113,8 @@ class AdminActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
+
         dialog.show()
+
     }
 }

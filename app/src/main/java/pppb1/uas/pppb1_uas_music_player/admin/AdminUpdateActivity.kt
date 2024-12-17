@@ -24,31 +24,31 @@ class AdminUpdateActivity : AppCompatActivity() {
         val client = ApiClient.getInstance()
         with(binding) {
             val id = intent.getStringExtra("id")
-            val songName = intent.getStringExtra("judul")
-            val artists = intent.getStringExtra("artis")
-            val albumName = intent.getStringExtra("album")
-            val release = intent.getStringExtra("rilis")
+            val song_name = intent.getStringExtra("song_name")
+            val artist = intent.getStringExtra("artist")
+            val album_name = intent.getStringExtra("album_name")
+            val release = intent.getStringExtra("release")
 
-            inputSongName.setText(songName)
-            inputArtist.setText(artists)
-            inputAlbum.setText(albumName)
+            inputSongName.setText(song_name)
+            inputArtist.setText(artist)
+            inputAlbumName.setText(album_name)
             inputRilis.setText(release)
 
-            btnEditMusic.setOnClickListener{
-                val updatedJudul = inputSongName.text.toString()
-                val updatedArtis = inputArtist.text.toString()
-                val updatedAlbum = inputAlbum.text.toString()
-                val updatedRilis = inputRilis.text.toString()
+            btnEditMusic.setOnClickListener {
+                val updatedSongName = inputSongName.text.toString()
+                val updatedArtist = inputArtist.text.toString()
+                val updatedAlbum = inputAlbumName.text.toString()
+                val updatedRelease = inputAlbumName.text.toString()
 
-                if (validateForm(updatedJudul, updatedArtis, updatedAlbum, updatedRilis)) {
+                if (validateForm(updatedSongName, updatedArtist, updatedAlbum, updatedRelease)) {
                     val musics = Musics(
-                        id = id.toString(),
-                        judul = updatedJudul,
-                        artis = updatedArtis,
-                        album = updatedAlbum,
-                        rilis = updatedRilis
+                        id = id,
+                        song_name = updatedSongName,
+                        artist = updatedArtist,
+                        album_name = updatedAlbum,
+                        release = updatedRelease
                     )
-                    val response = client.updateMusic(id.toString(),musics)
+                    val response = client.updateMusics(id.toString(),musics)
                     response.enqueue(object : Callback<Musics> {
                         override fun onResponse(
                             call: Call<Musics>,
@@ -57,7 +57,7 @@ class AdminUpdateActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 Toast.makeText(
                                     this@AdminUpdateActivity,
-                                    "Musik berhasil diupdate",
+                                    "Lagu berhasil diupdate",
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 val intent = Intent(this@AdminUpdateActivity, AdminActivity::class.java)
@@ -65,7 +65,7 @@ class AdminUpdateActivity : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     this@AdminUpdateActivity,
-                                    "Gagal update musik",
+                                    "Gagal update lagu",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -85,14 +85,15 @@ class AdminUpdateActivity : AppCompatActivity() {
     }
 
     private fun validateForm(
-        judul: String,
-        artis: String,
-        album: String,
-        rilis: String
+        song_name: String,
+        artist: String,
+        album_name: String,
+        release: String
     ): Boolean {
-        return judul.isNotEmpty() &&
-                artis.isNotEmpty() &&
-                album.isNotEmpty() &&
-                rilis.isNotEmpty()
+        return song_name.isNotEmpty() &&
+                artist.isNotEmpty() &&
+                album_name.isNotEmpty() &&
+                release.isNotEmpty()
     }
+
 }

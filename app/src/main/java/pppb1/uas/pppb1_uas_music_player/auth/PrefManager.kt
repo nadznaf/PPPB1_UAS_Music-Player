@@ -6,7 +6,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 import kotlin.concurrent.Volatile
 
-class PrefManager private constructor(context: Context){
+class PrefManager private constructor(context: Context) {
     private val sharedPreferences: SharedPreferences
 
     companion object {
@@ -27,10 +27,9 @@ class PrefManager private constructor(context: Context){
             }
         }
     }
+
     init {
-        sharedPreferences = context.getSharedPreferences(
-            PREFS_FILENAME,
-            Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
     }
 
     fun setLoggedIn(isLoggedIn: Boolean) {
@@ -41,6 +40,8 @@ class PrefManager private constructor(context: Context){
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
+
+    //    method save untuk menyimpan data
     fun saveUsername(username: String) {
         val editor = sharedPreferences.edit()
         editor.putString(KEY_USERNAME, username)
@@ -61,22 +62,24 @@ class PrefManager private constructor(context: Context){
         editor.putString(KEY_ROLE, role)
         editor.apply()
     }
+
+    //    method get untuk mengambil data
     fun getUsername(): String {
-        return sharedPreferences.getString(KEY_USERNAME, "") ?:""
+        return sharedPreferences.getString(KEY_USERNAME, "") ?: ""
     }
     fun getEmail(): String {
         return sharedPreferences.getString(KEY_EMAIL, "") ?: ""
     }
     fun getPassword(): String {
-        return sharedPreferences.getString(KEY_PASSWORD, "") ?:""
+        return sharedPreferences.getString(KEY_PASSWORD, "") ?: ""
     }
     fun getRole(): String {
         return sharedPreferences.getString(KEY_ROLE, "user") ?: "user"
     }
-    fun clear(){
+
+    fun clear() {
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
     }
-
 }

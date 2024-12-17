@@ -1,21 +1,18 @@
 package pppb1.uas.pppb1_uas_music_player.model
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "musics_db")
-data class Musics (
-    @PrimaryKey
+data class Musics(
     @SerializedName("_id")
-    val id: String = "",
+    val id: String ?  = null,
     @SerializedName("song_name")
-    val judul: String,
+    val song_name: String,
     @SerializedName("artist")
-    val artis: String,
+    val artist: String,
     @SerializedName("album_name")
-    val album: String,
+    val album_name: String,
     @SerializedName("release")
-    val rilis: String,
+    val release: String
 )
-

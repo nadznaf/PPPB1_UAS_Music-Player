@@ -7,7 +7,7 @@
     tools:context=".fragment.ProfileFragment"
     android:orientation="vertical"
     android:padding="32dp"
-    android:background="@color/gelap"
+    android:background="@color/white"
     android:gravity="center">
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="Akun Profile"
         android:textSize="24sp"
-        android:textColor="@color/white"
+        android:textColor="@color/gelap"
         android:fontFamily="@font/poppins_bold"
         android:textAlignment="center" />
 
@@ -26,12 +26,12 @@
         android:src="@drawable/profile"
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
-        app:tint="@color/abu_tua" />
+        app:tint="@color/gelap" />
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_input"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/abu_tua"
         android:layout_marginTop="32dp"
         app:cardCornerRadius="16dp"
         >

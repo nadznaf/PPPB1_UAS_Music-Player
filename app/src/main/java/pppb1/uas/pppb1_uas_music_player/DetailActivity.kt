@@ -1,62 +1,57 @@
 package pppb1.uas.pppb1_uas_music_player
 
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import pppb1.uas.pppb1_uas_music_player.database.LibraryDao
-import pppb1.uas.pppb1_uas_music_player.database.LibraryRoomDatabase
+import pppb1.uas.pppb1_uas_music_player.database.FavoriteDao
+import pppb1.uas.pppb1_uas_music_player.database.FavoriteRoomDatabase
 import pppb1.uas.pppb1_uas_music_player.databinding.ActivityDetailBinding
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemDialogBinding
-import pppb1.uas.pppb1_uas_music_player.model.Library
-import pppb1.uas.pppb1_uas_music_player.model.Musics
+import pppb1.uas.pppb1_uas_music_player.model.Favorite
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class DetailActivity() : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var executorService: ExecutorService
-    private lateinit var LibraryDao: LibraryDao
-
+    private lateinit var favoriteDao: FavoriteDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         executorService = Executors.newSingleThreadExecutor()
-        val libraryRoomDatabase = LibraryRoomDatabase.getDatabase(applicationContext)
-        LibraryDao = libraryRoomDatabase?.libraryDao()!!
+        val favoriteRoomDatabase = FavoriteRoomDatabase.getDatabase(applicationContext)
+        favoriteDao = favoriteRoomDatabase?.favoriteDao()!!
 
         with(binding) {
-            songName.text = intent.getStringExtra("judul")
-            artist.text = intent.getStringExtra("artis")
-            album.text = intent.getStringExtra("album")
-            rilis.text = intent.getStringExtra("rilis")
+            txtJudulLagu.text = intent.getStringExtra("song_name")
+            txtArtist.text = intent.getStringExtra("artist")
+            txtAlbum.text = intent.getStringExtra("album_name")
+            txtRilis.text = intent.getStringExtra("release")
 
-            ivBack.setOnClickListener{
+            ivBack.setOnClickListener {
                 finish()
             }
-            btnFav.setOnClickListener {
+            btnFavorite.setOnClickListener {
                 showFavoriteDialog()
             }
         }
     }
 
-    private fun insert(library: Library) {
+    private fun insert(favorite: Favorite) {
         executorService.execute {
-            LibraryDao.insert(library)
+            favoriteDao.insert(favorite)
 
+            // Move observation to the main thread
             runOnUiThread {
-                LibraryDao.getAllLibrary().observe(this@DetailActivity, { musicList ->
-                    musicList?.forEach {
-                        music -> Log.d("Music Inserted", "ID: ${music.id}, Name: ${music.judul}")
+                // Observe the LiveData on the main thread
+                favoriteDao.getAllFavorite().observe(this@DetailActivity, { musicList ->
+                    // This will be triggered when the data changes or is initially available
+                    musicList?.forEach { favorite ->
+                        Log.d("Favorite Inserted", "ID: ${favorite.id}, Name: ${favorite.song_name}")
                     }
                 })
             }
@@ -64,31 +59,36 @@ class DetailActivity() : AppCompatActivity() {
     }
 
     private fun showFavoriteDialog() {
-        val dialogBinding = ItemDialogBinding.inflate(LayoutInflater.from(this@DetailActivity))
+        val dialogBinding = ItemDialogBinding.inflate(LayoutInflater.from(this))
 
-        val dialog = AlertDialog.Builder(this@DetailActivity)
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogBinding.root)
             .create()
         dialogBinding.dialogIcon.setImageResource(R.drawable.like_full)
         dialogBinding.dialogTitle.text = "Tambah ke Favorit"
         dialogBinding.dialogMessage.text =
             "Apakah Anda yakin ingin menambahkan lagu ini ke favorit?"
+
         dialogBinding.btnConfirm.setOnClickListener {
-            val library = Library(
+            // Insert the item into the database
+            val favorite = Favorite(
                 id = intent.getStringExtra("id").toString(),
-                judul = intent.getStringExtra("judul").toString(),
-                artis = intent.getStringExtra("artis").toString(),
-                album = intent.getStringExtra("album").toString(),
-                rilis = intent.getStringExtra("rilis").toString()
+                song_name = intent.getStringExtra("song_name").toString(),
+                artist = intent.getStringExtra("artist").toString(),
+                album_name = intent.getStringExtra("album_name").toString(),
+                release = intent.getStringExtra("release").toString(),
             )
-            insert(library)
-            dialog.dismiss()
-            Toast.makeText(this@DetailActivity, "Lagu berhasil ditambahkan ke favorit", Toast.LENGTH_SHORT)
+            insert(favorite)
+            dialog.dismiss() // Dismiss the dialog after confirming
+            Toast.makeText(this, "Lagu berhasil ditambahkan ke favorit", Toast.LENGTH_SHORT)
                 .show()
         }
+
         dialogBinding.btnCancel.setOnClickListener {
-            dialog.dismiss()
+            dialog.dismiss() // Dismiss the dialog if canceled
         }
-        dialog.show()
+
+        dialog.show() // Show the dialog
     }
+
 }

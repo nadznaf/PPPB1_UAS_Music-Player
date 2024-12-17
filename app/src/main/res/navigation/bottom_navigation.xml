@@ -16,13 +16,13 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/libraryFragment"
-        android:name="pppb1.uas.pppb1_uas_music_player.fragment.LibraryFragment"
-        android:label="fragment_library"
-        tools:layout="@layout/fragment_library" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="pppb1.uas.pppb1_uas_music_player.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="pppb1.uas.pppb1_uas_music_player.fragment.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
 </navigation>

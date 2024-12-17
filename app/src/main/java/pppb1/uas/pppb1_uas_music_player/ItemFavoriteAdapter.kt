@@ -9,19 +9,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemDialogBinding
 import pppb1.uas.pppb1_uas_music_player.databinding.ItemFavoriteBinding
-import pppb1.uas.pppb1_uas_music_player.model.Library
+import pppb1.uas.pppb1_uas_music_player.model.Favorite
 
-class ItemFavoriteAdapter(
-    private val Context: Context,
-    private val deleteAction: (Library) -> Unit,
-    private val LibraryDetail: (Library) -> Unit
-) : ListAdapter<Library, ItemFavoriteAdapter.ItemFavoriteViewHolder>(DiffCallback) {
+class ItemFavoriteAdapter(private val Context: Context,
+                          private val deleteAction: (Favorite) -> Unit,
+                          private val favoriteDetail: (Favorite) -> Unit
+) : ListAdapter<Favorite, ItemFavoriteAdapter.ItemFavoriteViewHolder>(DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<Library>() {
-        override fun areItemsTheSame(oldItem: Library, newItem: Library): Boolean {
+    object DiffCallback : DiffUtil.ItemCallback<Favorite>() {
+        override fun areItemsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
             return oldItem.id == newItem.id // Check if the IDs are the same
         }
-        override fun areContentsTheSame(oldItem: Library, newItem: Library): Boolean {
+
+        override fun areContentsTheSame(oldItem: Favorite, newItem: Favorite): Boolean {
             return oldItem == newItem // Check if the content is the same
         }
     }
@@ -29,12 +29,13 @@ class ItemFavoriteAdapter(
     inner class ItemFavoriteViewHolder(private val binding: ItemFavoriteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Library) {
+        fun bind(data: Favorite) {
             with(binding) {
-                txtJudulLagu.text = data.judul
-                artis.text = data.artis
+                txtJudulLagu.text = data.song_name
+                txtArtis.text = data.artist
 
-                imgLike.setOnClickListener {
+                // Handle delete button click
+                btnUnfavorite.setOnClickListener {
                     val dialogBinding =
                         ItemDialogBinding.inflate(LayoutInflater.from(itemView.context))
                     val dialog = AlertDialog.Builder(itemView.context)
@@ -42,7 +43,7 @@ class ItemFavoriteAdapter(
                         .create()
                     dialogBinding.dialogTitle.text = "Konfirmasi Hapus"
                     dialogBinding.dialogMessage.text =
-                        "Apakah Anda yakin ingin menghapus lagu ${data.judul}?"
+                        "Apakah Anda yakin ingin menghapus lagu ${data.song_name} dari favorit?"
 
                     dialogBinding.btnConfirm.setOnClickListener {
                         deleteAction(data)
@@ -55,7 +56,7 @@ class ItemFavoriteAdapter(
                     dialog.show()
                 }
                 itemView.setOnClickListener{
-                    LibraryDetail(data)
+                    favoriteDetail(data)
                 }
             }
         }
@@ -69,5 +70,4 @@ class ItemFavoriteAdapter(
     override fun onBindViewHolder(holder: ItemFavoriteViewHolder, position: Int) {
         holder.bind(getItem(position)) // Only pass the data to bind
     }
-
 }

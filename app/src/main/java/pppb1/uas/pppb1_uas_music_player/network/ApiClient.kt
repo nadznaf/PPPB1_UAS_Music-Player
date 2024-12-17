@@ -9,7 +9,6 @@ object ApiClient {
     fun getInstance(): ApiService {
         val mHttpLoggingInterceptor = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
-
         val mOkHttpClient = OkHttpClient
             .Builder()
             .addInterceptor(mHttpLoggingInterceptor)
@@ -19,7 +18,6 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(mOkHttpClient)
             .build()
-
         return builder.create(ApiService::class.java)
     }
 }

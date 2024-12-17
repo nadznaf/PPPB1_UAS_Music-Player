@@ -15,8 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
         android:onClick="back"
         android:padding="10dp"
         android:src="@drawable/baseline_back"
@@ -48,17 +46,11 @@
         android:tint="@color/gelap"
         android:background="@color/abu_tua"
         />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/like_line"
-        android:layout_marginTop="16dp"
-        app:tint="@color/pink" />
     <TextView
         android:id="@+id/txt_artist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="48dp"
         android:textSize="18sp"
         android:fontFamily="@font/poppins_regular"
         android:textStyle="bold"
@@ -67,7 +59,7 @@
         android:textAlignment="center"
         />
     <TextView
-        android:id="@+id/txt_song_name"
+        android:id="@+id/txt_judul_lagu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"

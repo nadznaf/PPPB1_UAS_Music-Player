@@ -2,8 +2,10 @@ package pppb1.uas.pppb1_uas_music_player.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import pppb1.uas.pppb1_uas_music_player.admin.AdminActivity
 import pppb1.uas.pppb1_uas_music_player.databinding.ActivityRegisterBinding
 import pppb1.uas.pppb1_uas_music_player.model.User
 import pppb1.uas.pppb1_uas_music_player.network.ApiClient
@@ -13,7 +15,6 @@ import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var prefManager: PrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,16 +22,18 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         with(binding) {
-            btnRegis.setOnClickListener {
-                val username = binding.inputUsnRegis.text.toString()
-                val email = binding.inputEmailRegis.text.toString()
-                val password = binding.inputPwRegis.text.toString()
-                val confirmPassword = binding.inputConfirmRegis.text.toString()
+            btnRegister.setOnClickListener {
+                val username = binding.inputUsername.text.toString()
+                val email = binding.inputEmail.text.toString()
+                val password = binding.inputPassword.text.toString()
+                val confirmPassword = binding.inputConfirm.text.toString()
 
                 if (validateForm(username, email, password, confirmPassword)) {
+                    // Kirim permintaan untuk mengecek apakah username sudah ada
                     val apiService = ApiClient.getInstance()
                     val response = apiService.getAllUsers()
-                    btnRegis.isEnabled = false
+                    progressBar.visibility = View.VISIBLE // Show loading indicator
+                    btnRegister.isEnabled = false // Disable button
 
                     response.enqueue(object : Callback<List<User>> {
                         override fun onResponse(
@@ -39,11 +42,13 @@ class RegisterActivity : AppCompatActivity() {
                         ) {
                             if (response.isSuccessful && response.body() != null) {
                                 val users = response.body()
+                                // Mengecek apakah username sudah terdaftar
                                 val existingUser = users?.find { it.username == username }
                                 val existingEmail = users?.find { it.email == email }
                                 if (existingUser != null || existingEmail != null) {
-                                    btnRegis.isEnabled = true
-
+                                    progressBar.visibility = View.GONE // Hide loading
+                                    btnRegister.isEnabled = true // Re-enable button
+                                    // Username sudah ada, beri tahu pengguna
                                     Toast.makeText(
                                         this@RegisterActivity,
                                         "Username or email already exists",
@@ -51,18 +56,19 @@ class RegisterActivity : AppCompatActivity() {
                                     ).show()
 
                                 } else {
-
+                                    // Username belum ada, lanjutkan dengan pendaftaran
                                     val user = User(
                                         id = null,
                                         username = username,
                                         email = email,
                                         password = password,
-                                        role = "user"
+                                        role = "user" // Default role "user"
                                     )
                                     createUser(user)
                                 }
                             } else {
-                                btnRegis.isEnabled = true
+                                progressBar.visibility = View.GONE // Hide loading
+                                btnRegister.isEnabled = true // Re-enable button
                                 Toast.makeText(
                                     this@RegisterActivity,
                                     "Failed to fetch users",
@@ -72,7 +78,8 @@ class RegisterActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                            btnRegis.isEnabled = true
+                            progressBar.visibility = View.GONE // Hide loading
+                            btnRegister.isEnabled = true
                             Toast.makeText(
                                 this@RegisterActivity,
                                 "Error: ${t.message}",
